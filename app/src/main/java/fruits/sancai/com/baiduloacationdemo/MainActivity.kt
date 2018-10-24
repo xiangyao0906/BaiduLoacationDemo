@@ -2,7 +2,6 @@ package fruits.sancai.com.baiduloacationdemo
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -20,9 +19,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), LocationListener {
 
+
     var permission: Array<String> = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.LOCATION_HARDWARE,
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.READ_EXTERNAL_STORAGE
     )
@@ -45,7 +44,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         if (mPermission.size > 0) {//有权限没有通过，需要申请
             ActivityCompat.requestPermissions(this, permission, mRequestCode)
         } else {
-           mLocationClient?.start()
+            mLocationClient?.start()
         }
 
     }
@@ -61,7 +60,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val street = location.street    //获取街道信息
 
 
-        loacationMesaage.setText(addr)
+        loacationMesaage.text = addr
 
         Log.i("xiangyao", country + province + city + district + street + "______" + addr)
 
@@ -87,21 +86,22 @@ class MainActivity : AppCompatActivity(), LocationListener {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        var hasPermission = false
 
         if (mRequestCode == requestCode) {
 
-            for ((i, v) in grantResults.withIndex()) {
+            var requestPerminssionCount = 0
 
-                if (grantResults[i] == -1) {
-                    hasPermission = true
+            for ((i, _) in grantResults.withIndex()) {
+
+                if (grantResults[i] == 0) {
+                    requestPerminssionCount++
                 }
             }
 
-            if (hasPermission) {
-                showPermissionDialog()
-            } else {
+            if (requestPerminssionCount == grantResults.size) {
                 mLocationClient?.start()
+            } else {
+                showPermissionDialog()
             }
 
         }
@@ -124,12 +124,14 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageUri)
 
-                    startActivity(intent)
+                    startActivityForResult(intent, mRequestCode)
 
 
                 }.setNegativeButton("取消") { p0, p1 ->
 
                     cancelPermissionDialog()
+
+                    finish()
 
                 }
                 .create()
@@ -141,5 +143,18 @@ class MainActivity : AppCompatActivity(), LocationListener {
         mPermissionDialog?.cancel()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
+        if (requestCode == mRequestCode) {
+
+            for ((index, value) in arrayOf(permission).withIndex()) {
+
+                if (ContextCompat.checkSelfPermission(this, value[index]) != PackageManager.PERMISSION_GRANTED) {
+                    finish()
+                }
+            }
+
+        }
+    }
 }
