@@ -2,14 +2,13 @@ package fruits.sancai.com.baiduloacationdemo
 
 import android.Manifest
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.widget.Toast
 import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
 import com.baidu.location.LocationClientOption
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_permission_with_third.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
@@ -47,10 +46,9 @@ class PermissionWithThirdActivity : AppCompatActivity(), LocationListener, EasyP
         val district = location.district    //获取区县
         val street = location.street    //获取街道信息
 
-
-        loacationMesaage.text = addr
-
-        Log.i("xiangyao", country + province + city + district + street + "______" + addr)
+        kt_textview.text=addr
+//
+//        Log.i("xiangyao", country + province + city + district + street + "______" + addr)
 
     }
 
@@ -59,7 +57,6 @@ class PermissionWithThirdActivity : AppCompatActivity(), LocationListener, EasyP
     private val LOCATION =
         arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.LOCATION_HARDWARE,
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.READ_EXTERNAL_STORAGE
         )

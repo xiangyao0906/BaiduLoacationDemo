@@ -7,12 +7,12 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
 
         <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-                  android:id="@+id/loacationMesaage"/>
+                  android:id="@+id/loacationMesaage"
+        android:gravity="center"
+        />
 
-    </ScrollView>
 
 
 </android.support.constraint.ConstraintLayout>
